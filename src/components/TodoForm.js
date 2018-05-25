@@ -1,4 +1,14 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+import { Field, reduxForm } from 'redux-form'
+import { addTodo } from '../actions/todoActions'
+
+
+let ContactForm = props => {
+  const { handleSubmit } = props
+  return <form onSubmit={handleSubmit}></form>
+}
+
 
 class TodoForm extends Component {
   state = {
@@ -10,18 +20,24 @@ class TodoForm extends Component {
     this.setState({ newTodo: event.target.value })
   }
 
-  render () {
+  handleSubmit = (event) => {
+    event.preventDefault()
+    this.props.addTodo(this.state.newTodo)
+    this.setState({ newTodo: '' })
+  }
+
+  render() {
     return (
-      <div>
+      <form onSubmit={this.handleSubmit}>
         <input
           onChange={this.handleChange}
           value={this.state.newTodo}
         />
         <button>Add Todo</button>
-      </div>
+      </form>
     )
   }
 
 }
 
-export default TodoForm
+export default connect(null, { addTodo })(TodoForm)
